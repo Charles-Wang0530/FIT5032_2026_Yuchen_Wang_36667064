@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "Jane Austen",
+    "birthYear": 1775,
+    "famousWorks": [
+      {
+        "title": "Pride and Prejudice",
+        "year": 1813
+      },
+      {
+        "title": "Sense and Sensibility",
+        "year": 1811
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Charles Dickens",
+    "birthYear": 1812,
+    "famousWorks": [
+      {
+        "title": "Oliver Twist",
+        "year": 1838
+      },
+      {
+        "title": "Great Expectations",
+        "year": 1861
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "George Orwell",
+    "birthYear": 1903,
+    "famousWorks": [
+      {
+        "title": "Animal Farm",
+        "year": 1945
+      },
+      {
+        "title": "Nineteen Eighty-Four",
+        "year": 1949
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Virginia Woolf",
+    "birthYear": 1882,
+    "famousWorks": [
+      {
+        "title": "Mrs Dalloway",
+        "year": 1925
+      },
+      {
+        "title": "To the Lighthouse",
+        "year": 1927
+      }
+    ]
+  }
+]

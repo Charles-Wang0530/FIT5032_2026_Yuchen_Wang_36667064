@@ -1,0 +1,38 @@
+{
+  "company": "Y-Wang Library",
+  "totalStores": 3,
+  "storeTypes": [
+    {
+      "type": "Campus Store",
+      "count": 1
+    },
+    {
+      "type": "City Store",
+      "count": 2
+    }
+  ],
+  "openingHours": {
+    "Monday": {
+      "open": "09:00",
+      "close": "18:00"
+    },
+    "Tuesday": {
+      "open": "09:00",
+      "close": "18:00"
+    },
+    "Wednesday": {
+      "open": "09:00",
+      "close": "18:00"
+    },
+    "Saturday": {
+      "open": "10:00",
+      "close": "16:00"
+    }
+  },
+  "locations": ["Melbourne", "Clayton", "Caulfield"],
+  "topSellers": [
+    "Nineteen Eighty-Four",
+    "Pride and Prejudice",
+    "Great Expectations"
+  ]
+}
