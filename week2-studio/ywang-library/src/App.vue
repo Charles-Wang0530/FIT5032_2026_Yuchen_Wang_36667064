@@ -14,8 +14,5 @@ import Form from "./components/Form.vue"
 main {
   width: 100%;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 </style>
