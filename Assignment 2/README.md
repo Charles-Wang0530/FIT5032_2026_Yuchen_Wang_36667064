@@ -11,5 +11,8 @@ npm run dev
 
 ## Current development stage
 
-The first milestone establishes the Vue application, responsive route structure and the bright yellow-and-blue visual system. Dynamic data, validation, authentication, role access, ratings and security controls will be added in the following planned milestones.
+Milestone two adds dynamic JavaScript datasets, resource search and filters, locally saved resources, personalised mood-check recommendations, validated event registration and Local Storage persistence. Authentication, role access, aggregated ratings and final security controls remain planned for the next milestones.
 
+## Locally persisted demo data
+
+The application currently stores saved-resource IDs, anonymous mood check-ins and event bookings in the browser's Local Storage. This provides persistence across refreshes for the client-side assignment demonstration.
