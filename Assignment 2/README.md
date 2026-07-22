@@ -11,7 +11,7 @@ npm run dev
 
 ## Current development stage
 
-Milestone three adds registration, sign-in, salted password hashing, persistent multi-user accounts, route guards, role-aware dashboards and an administrator-only account management page. Aggregated ratings and final security controls remain planned for the final milestone.
+The completed application includes dynamic resources and events, input validation, anonymous mood recommendations, persistent multi-user authentication, role-protected pages, one-rating-per-account aggregated helpfulness scores and client-side security controls.
 
 ## Locally persisted demo data
 
@@ -25,4 +25,15 @@ The application currently stores saved-resource IDs, anonymous mood check-ins an
 | Family supporter | `family@mindbridge.test` | `Family123!` |
 | Administrator | `admin@mindbridge.test` | `Admin123!` |
 
-These credentials are for the local learning demonstration only. Password values are converted to salted SHA-256 hashes before account records are stored; the application does not store plaintext passwords.
+These credentials are public test data for the local learning demonstration only. Account passwords are converted to salted PBKDF2-SHA-256 derived values before records are stored; the application does not store registered users' plaintext passwords.
+
+## Verification
+
+```sh
+npm test
+npm run build
+```
+
+The automated tests cover authentication, persistent sessions, account roles, route access, security helpers and aggregated rating updates.
+
+See [SECURITY.md](./SECURITY.md) for the BR C.4 security reflection and production limitations.

@@ -3,8 +3,10 @@ import { computed, ref } from 'vue'
 import { events } from '../data/events'
 import { resources } from '../data/resources'
 import { useAuth } from '../stores/auth'
+import { useRatings } from '../stores/ratings'
 
 const { currentUser, publicUsers, updateUserRole } = useAuth()
+const { ratingCount } = useRatings()
 const statusMessage = ref('')
 
 const memberCount = computed(() => publicUsers.value.filter((user) => user.role !== 'admin').length)
@@ -33,6 +35,7 @@ function formatDate(dateString) {
         <article><strong>{{ familyCount }}</strong><span>Family supporters</span></article>
         <article><strong>{{ resources.length }}</strong><span>Published resources</span></article>
         <article><strong>{{ events.length }}</strong><span>Upcoming events</span></article>
+        <article><strong>{{ ratingCount }}</strong><span>Helpfulness ratings</span></article>
       </div>
 
       <section class="admin-panel" aria-labelledby="account-management-heading">
@@ -64,4 +67,3 @@ function formatDate(dateString) {
     </div>
   </section>
 </template>
-

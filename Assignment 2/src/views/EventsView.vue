@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue'
 import PageIntro from '../components/PageIntro.vue'
 import { eventFormats, events } from '../data/events'
+import { cleanEmail, cleanText } from '../utils/security'
 import { readStorage, writeStorage } from '../utils/storage'
 
 const selectedFormat = ref('All')
@@ -66,10 +67,10 @@ function submitBooking() {
   const booking = {
     id: crypto.randomUUID(),
     eventId: selectedEvent.value.id,
-    name: bookingForm.name.trim(),
-    email: bookingForm.email.trim().toLocaleLowerCase(),
+    name: cleanText(bookingForm.name, 60),
+    email: cleanEmail(bookingForm.email),
     attendees: Number(bookingForm.attendees),
-    accessibility: bookingForm.accessibility.trim(),
+    accessibility: cleanText(bookingForm.accessibility, 200),
     createdAt: new Date().toISOString(),
   }
 

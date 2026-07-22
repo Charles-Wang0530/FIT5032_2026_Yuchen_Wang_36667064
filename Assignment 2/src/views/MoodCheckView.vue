@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import PageIntro from '../components/PageIntro.vue'
 import { resources } from '../data/resources'
+import { cleanText } from '../utils/security'
 import { readStorage, writeStorage } from '../utils/storage'
 
 const moods = [
@@ -67,7 +68,7 @@ function submitCheckIn() {
     id: crypto.randomUUID(),
     mood: selectedMood.value,
     pressure: selectedPressure.value,
-    note: note.value.trim(),
+    note: cleanText(note.value, 160),
     createdAt: new Date().toISOString(),
   }
 

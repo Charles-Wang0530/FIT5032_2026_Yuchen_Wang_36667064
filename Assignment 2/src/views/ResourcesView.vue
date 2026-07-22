@@ -3,13 +3,19 @@ import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import PageIntro from '../components/PageIntro.vue'
 import { resourceCategories, resources } from '../data/resources'
+import { useAuth } from '../stores/auth'
+import { useRatings } from '../stores/ratings'
 import { readStorage, writeStorage } from '../utils/storage'
 
 const route = useRoute()
+const { currentUser, isAuthenticated } = useAuth()
+const { getRatingSummary, getUserRating, submitRating } = useRatings()
 const searchQuery = ref(typeof route.query.search === 'string' ? route.query.search.slice(0, 80) : '')
 const selectedCategory = ref('All')
 const selectedResource = ref(null)
 const savedIds = ref(readStorage('mindbridge:savedResources', []))
+const ratingSelection = ref(0)
+const ratingMessage = ref('')
 
 const filteredResources = computed(() => {
   const query = searchQuery.value.trim().toLocaleLowerCase()
@@ -44,6 +50,32 @@ function toggleSaved(resourceId) {
     ? savedIds.value.filter((id) => id !== resourceId)
     : [...savedIds.value, resourceId]
   writeStorage('mindbridge:savedResources', savedIds.value)
+}
+
+function openResource(resource) {
+  selectedResource.value = resource
+  ratingSelection.value = currentUser.value ? getUserRating(resource.id, currentUser.value.id) : 0
+  ratingMessage.value = ''
+}
+
+function closeResource() {
+  selectedResource.value = null
+  ratingSelection.value = 0
+  ratingMessage.value = ''
+}
+
+function saveRating() {
+  if (!selectedResource.value || !currentUser.value) return
+  const result = submitRating({
+    resourceId: selectedResource.value.id,
+    userId: currentUser.value.id,
+    score: ratingSelection.value,
+  })
+  ratingMessage.value = result.ok
+    ? result.updated
+      ? 'Your rating was updated. The new average is shown below.'
+      : 'Thank you. Your rating is now included in the average.'
+    : result.message
 }
 </script>
 
@@ -95,7 +127,12 @@ function toggleSaved(resourceId) {
           <h3>{{ resource.title }}</h3>
           <p>{{ resource.summary }}</p>
           <div class="resource-meta"><span>{{ resource.audience }}</span><span>{{ resource.duration }}</span></div>
-          <button class="text-button" type="button" @click="selectedResource = resource">Read overview →</button>
+          <div class="aggregated-rating" :aria-label="`${getRatingSummary(resource.id).average.toFixed(1)} out of 5 from ${getRatingSummary(resource.id).count} ratings`">
+            <span aria-hidden="true">★</span>
+            <strong>{{ getRatingSummary(resource.id).average.toFixed(1) }}</strong>
+            <small>{{ getRatingSummary(resource.id).count }} ratings</small>
+          </div>
+          <button class="text-button" type="button" @click="openResource(resource)">Read and rate →</button>
         </div>
         <button
           class="bookmark"
@@ -118,9 +155,9 @@ function toggleSaved(resourceId) {
     </div>
   </section>
 
-  <div v-if="selectedResource" class="modal-backdrop" role="presentation" @click.self="selectedResource = null">
+  <div v-if="selectedResource" class="modal-backdrop" role="presentation" @click.self="closeResource">
     <section class="detail-modal" role="dialog" aria-modal="true" :aria-labelledby="`detail-${selectedResource.id}`">
-      <button class="modal-close" type="button" aria-label="Close resource overview" @click="selectedResource = null">×</button>
+      <button class="modal-close" type="button" aria-label="Close resource overview" @click="closeResource">×</button>
       <div class="detail-modal__icon" :class="`resource-illustration--${selectedResource.color}`" aria-hidden="true">
         {{ selectedResource.icon }}
       </div>
@@ -135,6 +172,39 @@ function toggleSaved(resourceId) {
       <button class="button button--blue" type="button" @click="toggleSaved(selectedResource.id)">
         {{ savedIds.includes(selectedResource.id) ? 'Remove from saved' : 'Save for later' }}
       </button>
+
+      <section class="rating-panel" aria-labelledby="rating-panel-heading">
+        <p class="eyebrow">COMMUNITY HELPFULNESS</p>
+        <h3 id="rating-panel-heading">How helpful was this resource?</h3>
+        <div class="rating-summary-large">
+          <strong>{{ getRatingSummary(selectedResource.id).average.toFixed(1) }}</strong>
+          <div><span aria-hidden="true">★★★★★</span><small>Average from {{ getRatingSummary(selectedResource.id).count }} ratings</small></div>
+        </div>
+
+        <template v-if="isAuthenticated">
+          <div class="star-buttons" role="group" aria-label="Choose a rating from 1 to 5 stars">
+            <button
+              v-for="score in 5"
+              :key="score"
+              type="button"
+              :class="{ selected: score <= ratingSelection }"
+              :aria-label="`Rate ${score} ${score === 1 ? 'star' : 'stars'}`"
+              :aria-pressed="ratingSelection === score"
+              @click="ratingSelection = score"
+            >
+              ★
+            </button>
+          </div>
+          <button class="button button--blue" type="button" :disabled="!ratingSelection" @click="saveRating">
+            {{ getUserRating(selectedResource.id, currentUser.id) ? 'Update my rating' : 'Submit my rating' }}
+          </button>
+          <p v-if="ratingMessage" class="success-message" role="status">{{ ratingMessage }}</p>
+        </template>
+        <div v-else class="rating-sign-in">
+          <p>Sign in to add one rating per account and help other users.</p>
+          <RouterLink class="button button--outline" :to="{ name: 'login', query: { redirect: route.fullPath } }">Sign in to rate</RouterLink>
+        </div>
+      </section>
     </section>
   </div>
 </template>

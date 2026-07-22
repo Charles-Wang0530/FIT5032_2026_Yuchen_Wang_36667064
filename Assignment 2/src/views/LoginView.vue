@@ -2,6 +2,7 @@
 import { computed, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '../stores/auth'
+import { isSafeInternalPath } from '../utils/security'
 
 const route = useRoute()
 const router = useRouter()
@@ -66,7 +67,7 @@ function validateRegistration() {
 }
 
 async function finishAuthentication(user) {
-  const requestedPath = typeof route.query.redirect === 'string' && route.query.redirect.startsWith('/')
+  const requestedPath = typeof route.query.redirect === 'string' && isSafeInternalPath(route.query.redirect)
     ? route.query.redirect
     : null
   await router.push(requestedPath || (user.role === 'admin' ? '/admin' : '/dashboard'))
@@ -188,4 +189,3 @@ async function submitRegistration() {
     </div>
   </section>
 </template>
-

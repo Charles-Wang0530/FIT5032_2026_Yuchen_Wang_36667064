@@ -1,9 +1,11 @@
 import { computed, readonly, ref } from 'vue'
+import { cleanEmail, cleanText } from '../utils/security.js'
 import { readStorage, writeStorage } from '../utils/storage.js'
 
 const USERS_KEY = 'mindbridge:users'
 const SESSION_KEY = 'mindbridge:session'
 const ALLOWED_ROLES = ['user', 'family', 'admin']
+const PASSWORD_ITERATIONS = 120000
 
 const demoAccounts = [
   { name: 'David Tao', email: 'user@mindbridge.test', password: 'User123!', role: 'user' },
@@ -20,12 +22,18 @@ const isAdmin = computed(() => currentUser.value?.role === 'admin')
 const publicUsers = computed(() => users.value.map(toPublicUser))
 
 function normaliseEmail(email) {
-  return String(email).trim().toLocaleLowerCase()
+  return cleanEmail(email)
 }
 
 function toPublicUser(user) {
   if (!user) return null
-  const { passwordHash: _passwordHash, salt: _salt, ...safeUser } = user
+  const {
+    passwordHash: _passwordHash,
+    salt: _salt,
+    algorithm: _algorithm,
+    iterations: _iterations,
+    ...safeUser
+  } = user
   return safeUser
 }
 
@@ -34,21 +42,40 @@ function createSalt() {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
-async function hashPassword(password, salt) {
+async function hashLegacyPassword(password, salt) {
   const payload = new TextEncoder().encode(`${salt}:${password}`)
   const digest = await crypto.subtle.digest('SHA-256', payload)
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('')
+}
+
+async function derivePassword(password, salt, iterations = PASSWORD_ITERATIONS) {
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(password),
+    { name: 'PBKDF2' },
+    false,
+    ['deriveBits'],
+  )
+  const saltBytes = Uint8Array.from(salt.match(/.{1,2}/g).map((byte) => Number.parseInt(byte, 16)))
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', hash: 'SHA-256', salt: saltBytes, iterations },
+    keyMaterial,
+    256,
+  )
+  return Array.from(new Uint8Array(bits), (byte) => byte.toString(16).padStart(2, '0')).join('')
 }
 
 async function createUserRecord({ name, email, password, role }) {
   const salt = createSalt()
   return {
     id: crypto.randomUUID(),
-    name: String(name).trim(),
+    name: cleanText(name, 60),
     email: normaliseEmail(email),
     role: ALLOWED_ROLES.includes(role) ? role : 'user',
     salt,
-    passwordHash: await hashPassword(password, salt),
+    algorithm: 'PBKDF2-SHA-256',
+    iterations: PASSWORD_ITERATIONS,
+    passwordHash: await derivePassword(password, salt),
     createdAt: new Date().toISOString(),
   }
 }
@@ -81,8 +108,19 @@ export async function login(email, password) {
   const account = users.value.find((user) => user.email === normaliseEmail(email))
   if (!account) return { ok: false, message: 'Email or password is incorrect.' }
 
-  const candidateHash = await hashPassword(password, account.salt)
+  const candidateHash = account.algorithm === 'PBKDF2-SHA-256'
+    ? await derivePassword(password, account.salt, account.iterations || PASSWORD_ITERATIONS)
+    : await hashLegacyPassword(password, account.salt)
   if (candidateHash !== account.passwordHash) return { ok: false, message: 'Email or password is incorrect.' }
+
+  if (account.algorithm !== 'PBKDF2-SHA-256') {
+    const upgradedSalt = createSalt()
+    account.salt = upgradedSalt
+    account.algorithm = 'PBKDF2-SHA-256'
+    account.iterations = PASSWORD_ITERATIONS
+    account.passwordHash = await derivePassword(password, upgradedSalt)
+    writeStorage(USERS_KEY, users.value)
+  }
 
   currentUser.value = toPublicUser(account)
   writeStorage(SESSION_KEY, { userId: account.id, signedInAt: new Date().toISOString() })
