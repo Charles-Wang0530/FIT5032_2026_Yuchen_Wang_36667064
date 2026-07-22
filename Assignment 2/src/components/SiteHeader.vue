@@ -1,9 +1,12 @@
 <script setup>
 import { ref } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import BrandMark from './BrandMark.vue'
+import { useAuth } from '../stores/auth'
 
 const route = useRoute()
+const router = useRouter()
+const { currentUser, isAuthenticated, isAdmin, logout } = useAuth()
 const menuOpen = ref(false)
 
 const links = [
@@ -15,6 +18,12 @@ const links = [
 
 function closeMenu() {
   menuOpen.value = false
+}
+
+function signOut() {
+  logout()
+  closeMenu()
+  router.push('/')
 }
 </script>
 
@@ -47,9 +56,16 @@ function closeMenu() {
         >
           {{ link.label }}
         </RouterLink>
-        <RouterLink class="sign-in" to="/login" @click="closeMenu">Sign In</RouterLink>
+        <template v-if="isAuthenticated">
+          <RouterLink v-if="isAdmin" to="/admin" :class="{ active: route.path === '/admin' }" @click="closeMenu">Admin</RouterLink>
+          <RouterLink class="account-link" to="/dashboard" @click="closeMenu">
+            <span class="account-avatar" aria-hidden="true">{{ currentUser.name.charAt(0) }}</span>
+            {{ currentUser.name.split(' ')[0] }}
+          </RouterLink>
+          <button class="sign-out" type="button" @click="signOut">Sign Out</button>
+        </template>
+        <RouterLink v-else class="sign-in" to="/login" @click="closeMenu">Sign In</RouterLink>
       </div>
     </nav>
   </header>
 </template>
-
