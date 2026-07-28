@@ -97,11 +97,13 @@ const validateReason = () => {
 
 <template>
   <!-- 🗄️ W5. Library Registration Form -->
-  <img class="psyduck-avatar" :src="psyduckImage" alt="Psyduck mascot" />
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <h1 class="text-center">🗄️ W5. Library Registration Form</h1>
+        <h1 class="title-with-mascot">
+          <img class="psyduck-avatar" :src="psyduckImage" alt="Psyduck mascot" />
+          <span>🗄️ W5. Library Registration Form</span>
+        </h1>
         <p class="text-center">Let's build some more advanced features into our form.</p>
         <form @submit.prevent="submitForm">
           <div class="row mb-3">
@@ -223,16 +225,19 @@ const validateReason = () => {
 
 <style scoped>
 .psyduck-avatar {
-  position: fixed;
-  top: 9rem;
-  left: 1.25rem;
-  z-index: 10;
-  width: 4.5rem;
-  height: 4.5rem;
+  width: 3.25rem;
+  height: 3.25rem;
   object-fit: cover;
-  border: 3px solid white;
+  border: 2px solid white;
   border-radius: 50%;
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.2rem 0.55rem rgba(0, 0, 0, 0.2);
+}
+
+.title-with-mascot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
 }
 
 /* Class selectors */
