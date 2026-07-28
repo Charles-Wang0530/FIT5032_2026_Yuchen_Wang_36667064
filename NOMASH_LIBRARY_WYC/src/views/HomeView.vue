@@ -100,9 +100,11 @@ const validateReason = () => {
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <h1 class="title-with-mascot">
-          <img class="psyduck-avatar" :src="psyduckImage" alt="Psyduck mascot" />
-          <span>🗄️ W5. Library Registration Form</span>
+        <h1 class="text-center title-with-mascot">
+          <span class="title-text">
+            <img class="psyduck-avatar" :src="psyduckImage" alt="Psyduck mascot" />
+            🗄️ W5. Library Registration Form
+          </span>
         </h1>
         <p class="text-center">Let's build some more advanced features into our form.</p>
         <form @submit.prevent="submitForm">
@@ -225,19 +227,26 @@ const validateReason = () => {
 
 <style scoped>
 .psyduck-avatar {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.65rem);
   width: 3.25rem;
   height: 3.25rem;
   object-fit: cover;
   border: 2px solid white;
   border-radius: 50%;
   box-shadow: 0 0.2rem 0.55rem rgba(0, 0, 0, 0.2);
+  transform: translateY(-50%);
 }
 
 .title-with-mascot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.title-text {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
 }
 
 /* Class selectors */
