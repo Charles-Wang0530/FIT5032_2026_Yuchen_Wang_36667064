@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
+import psyduckImage from '@/assets/psyduck.jpeg'
 
 const formData = ref({
   username: '',
@@ -96,6 +97,7 @@ const validateReason = () => {
 
 <template>
   <!-- 🗄️ W5. Library Registration Form -->
+  <img class="psyduck-avatar" :src="psyduckImage" alt="Psyduck mascot" />
   <div class="container mt-5">
     <div class="row">
       <div class="col-md-8 offset-md-2">
@@ -220,6 +222,19 @@ const validateReason = () => {
 </template>
 
 <style scoped>
+.psyduck-avatar {
+  position: fixed;
+  top: 9rem;
+  left: 1.25rem;
+  z-index: 10;
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+  border: 3px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.2);
+}
+
 /* Class selectors */
 .form {
   text-align: center;
