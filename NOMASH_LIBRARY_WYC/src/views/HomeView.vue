@@ -229,7 +229,7 @@ const validateReason = () => {
 .psyduck-avatar {
   position: absolute;
   top: 50%;
-  right: calc(100% + 0.65rem);
+  right: calc(100% + 2.25rem);
   width: 3.25rem;
   height: 3.25rem;
   object-fit: cover;
@@ -246,6 +246,8 @@ const validateReason = () => {
 .title-text {
   position: relative;
   display: inline-block;
+  width: max-content;
+  max-width: none;
   white-space: nowrap;
 }
 
