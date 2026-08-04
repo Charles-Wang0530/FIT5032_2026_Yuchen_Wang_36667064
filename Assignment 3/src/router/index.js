@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardView from '../views/DashboardView.vue'
+import DataExplorerView from '../views/DataExplorerView.vue'
 import EventsView from '../views/EventsView.vue'
 import FamilySupportView from '../views/FamilySupportView.vue'
 import HomeView from '../views/HomeView.vue'
@@ -16,6 +17,7 @@ const routes = [
   { path: '/family-support', name: 'family-support', component: FamilySupportView, meta: { title: 'Family Support' } },
   { path: '/login', name: 'login', component: LoginView, meta: { title: 'Sign In' } },
   { path: '/dashboard', name: 'dashboard', component: DashboardView, meta: { title: 'Dashboard' } },
+  { path: '/data-explorer', name: 'data-explorer', component: DataExplorerView, meta: { title: 'Data Explorer' } },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFoundView, meta: { title: 'Page not found' } },
 ]
 
@@ -30,4 +32,3 @@ router.afterEach((to) => {
 })
 
 export default router
-

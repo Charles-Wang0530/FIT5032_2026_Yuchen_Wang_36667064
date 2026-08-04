@@ -10,6 +10,7 @@ const links = [
   { label: 'Resources', to: '/resources' },
   { label: 'Mood Check', to: '/mood-check' },
   { label: 'Events', to: '/events' },
+  { label: 'Data Explorer', to: '/data-explorer' },
   { label: 'Family Support', to: '/family-support' },
 ]
 
@@ -52,4 +53,3 @@ function closeMenu() {
     </nav>
   </header>
 </template>
-

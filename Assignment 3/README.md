@@ -11,5 +11,6 @@ npm run dev
 
 ## Current development stage
 
-The first milestone establishes the Vue application, responsive route structure and the bright yellow-and-blue visual system. Dynamic data, validation, authentication, role access, ratings and security controls will be added in the following planned milestones.
+The Assignment 3 foundation includes a responsive route structure, searchable wellbeing resources, private device-only mood check-ins and an offline-aware saved-resource experience. The Data Explorer provides two accessible interactive tables with global and individual-column search, sorting, ten-row pagination and filtered CSV export.
 
+Authentication, cloud functions, email delivery, mapping and role-aware administration will be connected in later milestones.
