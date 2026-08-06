@@ -202,6 +202,18 @@ p { line-height: 1.65; }
 .account-form .button { margin-top: 1.5rem; }
 .account-switch { margin-top: 1.5rem; text-align: center; }
 .account-switch a { color: var(--blue-dark); font-weight: 900; }
+.account-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1.25rem 0 0.5rem; padding: 0.35rem; border-radius: 0.9rem; background: var(--blue-soft); }
+.account-tabs button { min-height: 2.8rem; border: 0; border-radius: 0.7rem; background: transparent; color: var(--navy); font-weight: 900; cursor: pointer; }
+.account-tabs button.selected { background: var(--white); box-shadow: 0 4px 12px rgba(7,31,88,0.1); color: var(--blue-dark); }
+.auth-config-note, .auth-message { margin: 1rem 0; padding: 0.85rem 1rem; border-radius: 0.75rem; font-size: 0.9rem; font-weight: 800; }
+.auth-config-note { border-left: 0.3rem solid var(--yellow); background: var(--yellow-soft); }
+.auth-message--error { border-left: 0.3rem solid var(--coral); background: #ffe7e4; }
+.auth-message--success { border-left: 0.3rem solid #25865c; background: var(--mint-soft); }
+.text-button { display: block; margin: 1rem auto 0; border: 0; background: transparent; color: var(--blue-dark); font-weight: 900; text-decoration: underline; cursor: pointer; }
+.account-divider { display: flex; align-items: center; gap: 1rem; margin: 1.25rem 0; color: #617092; font-size: 0.85rem; font-weight: 900; }
+.account-divider::before, .account-divider::after { height: 1px; flex: 1; background: var(--line); content: ''; }
+.button--google { border-color: var(--line); background: var(--white); color: var(--navy); box-shadow: 0 6px 18px rgba(7,31,88,0.08); }
+.button--google span { display: grid; width: 1.6rem; aspect-ratio: 1; margin-right: 0.6rem; place-items: center; border-radius: 50%; background: var(--blue); color: var(--white); font-size: 0.8rem; }
 
 .dashboard-welcome { display: grid; min-height: 22rem; grid-template-columns: 1fr auto; align-items: center; gap: 2rem; margin-top: 1rem; padding: clamp(2rem, 6vw, 5rem); border-radius: var(--radius-lg); background: var(--yellow); }
 .dashboard-welcome h1 { margin-bottom: 1rem; font-size: clamp(3rem, 6vw, 5.5rem); }

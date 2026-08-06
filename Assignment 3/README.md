@@ -13,4 +13,4 @@ npm run dev
 
 The Assignment 3 foundation includes a responsive route structure, searchable wellbeing resources, private device-only mood check-ins and an offline-aware saved-resource experience. The Data Explorer provides two accessible interactive tables with global and individual-column search, sorting, ten-row pagination and filtered CSV export.
 
-Authentication, cloud functions, email delivery, mapping and role-aware administration will be connected in later milestones.
+Firebase Authentication supports email registration, persistent sign-in, password reset, Google sign-in and protected account routes once local Firebase environment values are supplied. Cloud functions, email delivery, mapping and role-aware administration will be connected in later milestones.

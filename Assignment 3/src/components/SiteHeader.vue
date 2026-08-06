@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import BrandMark from './BrandMark.vue'
+import { useAuth } from '../composables/useAuth'
 
 const route = useRoute()
 const menuOpen = ref(false)
+const { isAuthenticated } = useAuth()
 
 const links = [
   { label: 'Resources', to: '/resources' },
@@ -48,7 +50,9 @@ function closeMenu() {
         >
           {{ link.label }}
         </RouterLink>
-        <RouterLink class="sign-in" to="/login" @click="closeMenu">Sign In</RouterLink>
+        <RouterLink class="sign-in" :to="isAuthenticated ? '/dashboard' : '/login'" @click="closeMenu">
+          {{ isAuthenticated ? 'Dashboard' : 'Sign In' }}
+        </RouterLink>
       </div>
     </nav>
   </header>
